@@ -14,13 +14,12 @@ const usuario = new Usuario();
 
 //ROUTE DE LOGGEO DE USUARIO
 //Creación de la sesión
-router.post("/login", (req, res) => {
+router.post("/login", async (req, res) => {
+  const userArr = await usuario.listUsers();
+  const userValido = await userArr.find((user) => user.username === req.body.username && user.password === req.body.password);
+  
   try {
-    if (req.session.contador) {
-      req.session.contador++;
-      res.send(req.session);
-    } else {
-      console.log("creando");
+    if (userValido) {
       req.session.contador = 1;
       req.session.name = req.body.username;
       req.session.status = "success";
@@ -29,6 +28,9 @@ router.post("/login", (req, res) => {
         console.log(req.session);
         res.status(200).send(req.session)
       });
+    } else {
+      req.session.contador++;
+      res.send(req.session);
     }
   } catch (e) {
     res.status(500).json({ status: 'error', message: 'Algo salio mal al hacer login' });
@@ -59,10 +61,8 @@ router.get("/user", (req, res) => {
 
 router.post("/register", async (req, res) => {
   try {
-    console.log("holaaaaa");
-    const newUser = await usuario.newUser(req.body.name, req.body.lastName, req.body.username, req.body.direccion, req.body.password);
-    console.log(newUser);
-    res.send(newUser);
+    const newUser = await usuario.newUser(req.body);
+    res.status(200).send(newUser);
   } catch (err) {
     res.status(500).json({error: err.message});
   }

@@ -8,14 +8,22 @@ class Usuario {
         this.mongodb = mongoose.connect;
     }
     
-    async newUser(name, lastName, username, direccion, password) {
+    async newUser(data) {
         try {
             await this.mongodb(this.url);
-            console.log("entra aqui");
-            const crearUsuario = new UsuariosModel(name, lastName, username, direccion, password);
-            return await crearUsuario.save();
+            const crearUsuario = new UsuariosModel(data);
+            crearUsuario.save();
+            return await crearUsuario;
         } catch (err) {
             throw new Error('No se pudo crear el usuario.');
+        }
+    }
+    async listUsers() {
+        try {
+            await this.mongodb(this.url);
+            return await UsuariosModel.find();
+        } catch (err) {
+            throw new Error('No se encontro el usuario.');
         }
     }
 

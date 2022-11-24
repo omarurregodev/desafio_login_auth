@@ -23,12 +23,6 @@ export default function Register() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            console.log("hola2");
-            console.log(name);
-            console.log(lastName);
-            console.log(username);
-            console.log(direccion);
-            console.log(password);
             const { data:response } = await axios.post(
                 "http://localhost:8000/api/register",
                 { name, lastName, username, direccion, password },
@@ -37,8 +31,8 @@ export default function Register() {
                 }
             );
             console.log(response);
-            if (response.status === "success") {
-                navigate('/login');
+            if (response.name !== "") {
+                navigate('/');
                 window.location.reload();
             }
         } catch (e) {

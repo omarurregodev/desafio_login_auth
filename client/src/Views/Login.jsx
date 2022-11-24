@@ -20,7 +20,7 @@ const Login = () => {
     try {
       const { data:response } = await axios.post(
         "http://localhost:8000/api/login",
-        { username, password }, // falta agregar password {username, password}
+        { username, password }, 
         {
           withCredentials: true
         }
@@ -38,7 +38,7 @@ const Login = () => {
     <MDBContainer fluid>
       <MDBRow>
 
-        <MDBCol sm='6'>
+        <MDBCol sm='6' className="">
 
           <div className='d-flex flex-row ps-5 pt-5'>
             <span className="h1 fw-bold mb-0">E-commerce</span>
@@ -61,7 +61,7 @@ const Login = () => {
         </MDBCol>
 
         <MDBCol sm='6' className='d-none d-sm-block px-0'>
-          <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/img3.webp" alt="Login image" className="w-100" style={{objectFit: 'cover', objectPosition: 'left'}} />
+          <img src="https://upload.wikimedia.org/wikipedia/commons/9/9c/Barricas_Vino_Bodegas_Casajus_Ribera_del_Duero.jpg" alt="Login image" className="w-100" style={{objectFit: 'cover', objectPosition: 'left', maxHeight: '100vh'}} />
         </MDBCol>
 
       </MDBRow>
