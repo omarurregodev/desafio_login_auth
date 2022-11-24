@@ -29,7 +29,7 @@ app.use(session({
   key: 'currentSession',
   secret: 'its my secret',
   cookie: { 
-    maxAge: 1000 * 60,
+    maxAge: 1000 * 60 * 10,
    }, // value of maxAge is defined in milliseconds. 
   resave: false,
   saveUninitialized: false,

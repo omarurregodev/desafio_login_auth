@@ -1,10 +1,14 @@
 import express from "express";
+import mongoose from "mongoose";
+import Usuario from "../DAOs/usuarios.dao.class.js";
 
 //aqui se importan los controladores
 // import { loginUser, getUser } from "../controllers/loginControllers.js";
 
 //inicializo la ruta
 const router = express.Router();
+
+const usuario = new Usuario();
 
 //AQUI INICIO LAS RUTAS
 
@@ -49,6 +53,20 @@ router.get('/logout', (req, res) => {
 
 router.get("/user", (req, res) => {
   res.status(200).json({name:req.session.name});
+});
+
+// Registro de usuario
+
+router.post("/register", async (req, res) => {
+  try {
+    console.log("holaaaaa");
+    const newUser = await usuario.newUser(req.body.name, req.body.lastName, req.body.username, req.body.direccion, req.body.password);
+    console.log(newUser);
+    res.send(newUser);
+  } catch (err) {
+    res.status(500).json({error: err.message});
+  }
+
 });
 
 export default router;
