@@ -1,9 +1,8 @@
 import express from "express";
 import mongoose from "mongoose";
 import Usuario from "../DAOs/usuarios.dao.class.js";
+import passport from "passport";
 
-//aqui se importan los controladores
-// import { loginUser, getUser } from "../controllers/loginControllers.js";
 
 //inicializo la ruta
 const router = express.Router();
@@ -59,14 +58,19 @@ router.get("/user", (req, res) => {
 
 // Registro de usuario
 
-router.post("/register", async (req, res) => {
-  try {
-    const newUser = await usuario.newUser(req.body);
-    res.status(200).send(newUser);
-  } catch (err) {
-    res.status(500).json({error: err.message});
-  }
+router.post('/register', passport.authenticate('register', {
+  successRedirect: '/',
+  failureRedirect: '/register'
+}));
 
-});
+// router.post("/register", async (req, res) => {
+//   try {
+//     const newUser = await usuario.newUser(req.body);
+//     res.status(200).send(newUser);
+//   } catch (err) {
+//     res.status(500).json({error: err.message});
+//   }
+
+// });
 
 export default router;

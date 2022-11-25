@@ -23,6 +23,7 @@ export default function Register() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
+            console.log("aqui");
             const { data:response } = await axios.post(
                 "http://localhost:8000/api/register",
                 { name, lastName, username, direccion, password },
@@ -31,7 +32,7 @@ export default function Register() {
                 }
             );
             console.log(response);
-            if (response.name !== "") {
+            if (response) {
                 navigate('/');
                 window.location.reload();
             }

@@ -26,6 +26,14 @@ class Usuario {
             throw new Error('No se encontro el usuario.');
         }
     }
+    async listUsersByID(id) {
+        try {
+            await this.mongodb(this.url);
+            return await UsuariosModel.findById(id);
+        } catch (err) {
+            throw new Error('No se encontro el usuario.');
+        }
+    }
 
 }
 
