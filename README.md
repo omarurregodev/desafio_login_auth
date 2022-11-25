@@ -1,3 +1,3 @@
-# mernTest
+# PROJECT REACT
 
-The purpose of the project is to prove that  can build a fullstack web app with the MERN stack.
+Para correr el proyecto, se debe de hacer npm install en cada una de las carpetas (./client ==== ./server); para encenderlo, se debe de hacer npm start en cada uno de los directorios igualmente.
