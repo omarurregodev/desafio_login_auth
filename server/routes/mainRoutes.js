@@ -58,9 +58,9 @@ router.get("/user", (req, res) => {
 
 // Registro de usuario
 
-router.post('/register', passport.authenticate('register', {
-  successRedirect: '/',
-  failureRedirect: '/register'
+router.post("/register", passport.authenticate('register', {
+  successRedirect: '/api/',
+  failureRedirect: '/api/register'
 }));
 
 // router.post("/register", async (req, res) => {

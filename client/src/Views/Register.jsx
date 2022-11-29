@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import {
   MDBInput,
   MDBCol,
@@ -24,20 +24,30 @@ export default function Register() {
         e.preventDefault();
         try {
             console.log("aqui");
-            const { data:response } = await axios.post(
+            await axios.post(
                 "http://localhost:8000/api/register",
                 { name, lastName, username, direccion, password },
                 {
-                withCredentials: true
+                    headers: { 'Content-Type': 'application/json'},
+                    withCredentials: true
                 }
-            );
-            console.log(response);
-            if (response) {
+            ).then((response) => {
+                console.log(response.data);
+                console.log(JSON.stringify(response));
                 navigate('/');
                 window.location.reload();
+            }).catch((e) => {
+                console.log(e);
+            });
+           
+        } catch (err) {
+            if (!err?.response) {
+                console.log({"error": "No server response"});
+            } else if (err.response?.status === 409) {
+                console.log({"error": "Username Taken"});
+            } else {
+                console.log({"error": "Registration failed"});
             }
-        } catch (e) {
-            console.error(e);
         }
     };
     return (
@@ -46,31 +56,31 @@ export default function Register() {
         <form onSubmit={handleSubmit}>
             <MDBRow className="mb-4">
             <MDBCol>
-                <MDBInput id="name" label="Nombre" value={name} onChange={(e) => setName(e.target.value)}/>
+                <MDBInput id="name" label="name" value={name} onChange={(e) => setName(e.target.value)}/>
             </MDBCol>
             <MDBCol>
-                <MDBInput id="lastName" label="Apellido" value={lastName} onChange={(e) => setLastName(e.target.value)}/>
+                <MDBInput id="lastName" label="lastName" value={lastName} onChange={(e) => setLastName(e.target.value)}/>
             </MDBCol>
             </MDBRow>
             <MDBInput
             className="mb-4"
             type=""
             id="username"
-            label="Username"
+            label="username"
             value={username} onChange={(e) => setUsername(e.target.value)}
             />
             <MDBInput
             className="mb-4"
             type=""
             id="direccion"
-            label="Dirección"
+            label="dirección"
             value={direccion} onChange={(e) => setDireccion(e.target.value)}
             />
             <MDBInput
             className="mb-4"
             type="password"
             id="password"
-            label="Password"
+            label="password"
             value={password} onChange={(e) => setPassword(e.target.value)}
             />
 
