@@ -24,22 +24,20 @@ export default function Register() {
         e.preventDefault();
         try {
             console.log("aqui");
-            await axios.post(
+            const response = await axios.post(
                 "http://localhost:8000/api/register",
                 { name, lastName, username, direccion, password },
                 {
                     headers: { 'Content-Type': 'application/json'},
                     withCredentials: true
                 }
-            ).then((response) => {
-                console.log(response.data);
-                console.log(JSON.stringify(response));
+            );
+            console.log(response.data);
+            console.log(JSON.stringify(response));
+            if (response) {
                 navigate('/');
                 window.location.reload();
-            }).catch((e) => {
-                console.log(e);
-            });
-           
+            }
         } catch (err) {
             if (!err?.response) {
                 console.log({"error": "No server response"});

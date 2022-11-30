@@ -32,8 +32,8 @@ export const Home = () => {
             withCredentials: true
           }
         );
-        console.log("respuesta", response.name);
-        setData(response.name);
+        console.log("respuesta", response.name.user);
+        setData(response.name.user);
       } catch (e) {
         console.log(e);
       }

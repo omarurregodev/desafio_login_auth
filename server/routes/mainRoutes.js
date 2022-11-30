@@ -13,28 +13,32 @@ const usuario = new Usuario();
 
 //ROUTE DE LOGGEO DE USUARIO
 //Creación de la sesión
-router.post("/login", async (req, res) => {
-  const userArr = await usuario.listUsers();
-  const userValido = await userArr.find((user) => user.username === req.body.username && user.password === req.body.password);
+router.post("/login", passport.authenticate('login', {
+  successRedirect: '/api/user',
+  failureRedirect: '/api/'
+}));
+
+  // const userArr = await usuario.listUsers();
+  // const userValido = await userArr.find((user) => user.username === req.body.username && user.password === req.body.password);
   
-  try {
-    if (userValido) {
-      req.session.contador = 1;
-      req.session.name = req.body.username;
-      req.session.status = "success";
-      console.log(req.session.name);
-      req.session.save(() => {
-        console.log(req.session);
-        res.status(200).send(req.session)
-      });
-    } else {
-      req.session.contador++;
-      res.send(req.session);
-    }
-  } catch (e) {
-    res.status(500).json({ status: 'error', message: 'Algo salio mal al hacer login' });
-  }
-});
+  // try {
+  //   if (userValido) {
+  //     req.session.contador = 1;
+  //     req.session.name = req.body.username;
+  //     req.session.status = "success";
+  //     console.log(req.session.name);
+  //     req.session.save(() => {
+  //       console.log(req.session);
+  //       res.status(200).send(req.session)
+  //     });
+  //   } else {
+  //     req.session.contador++;
+  //     res.send(req.session);
+  //   }
+  // } catch (e) {
+  //   res.status(500).json({ status: 'error', message: 'Algo salio mal al hacer login' });
+  // }
+
 // Destruyo la sesion
 
 router.get('/logout', (req, res) => {
@@ -53,7 +57,7 @@ router.get('/logout', (req, res) => {
 //Llamo al user en sesion
 
 router.get("/user", (req, res) => {
-  res.status(200).json({name:req.session.name});
+  res.status(200).json({name:req.session.passport});
 });
 
 // Registro de usuario
@@ -63,14 +67,9 @@ router.post("/register", passport.authenticate('register', {
   failureRedirect: '/api/register'
 }));
 
-// router.post("/register", async (req, res) => {
-//   try {
-//     const newUser = await usuario.newUser(req.body);
-//     res.status(200).send(newUser);
-//   } catch (err) {
-//     res.status(500).json({error: err.message});
-//   }
+router.get('/', (req, res) => {
+  res.json({"message": "Usuario creado con exito!"})
+})
 
-// });
 
 export default router;

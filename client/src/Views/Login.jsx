@@ -18,19 +18,21 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const { data:response } = await axios.post(
+      const response = await axios.post(
         "http://localhost:8000/api/login",
         { username, password }, 
         {
+          headers: { 'Content-Type': 'application/json'},
           withCredentials: true
         }
       );
       console.log(response);
-      if (response.status === "success") {
+      if (response.status === 200) {
         navigate('/home');
         window.location.reload();
       }
     } catch (e) {
+      console.log("esta haciendo error el frontend");
       console.error(e);
     }
   };

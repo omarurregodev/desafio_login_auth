@@ -16,7 +16,6 @@ import mainRoutes from "./routes/mainRoutes.js";
 import passport from "passport";
 import { Strategy } from "passport-local";
 
-const uriMongo = 'mongodb+srv://omarurregodev:oturrego0712@normalizrcluster.u64wunr.mongodb.net/?retryWrites=true&';
 const localStrategy = Strategy;
 
 const usuario = new Usuario();
@@ -28,11 +27,20 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 
+// INICIO LA BASE DE DATOS!!
+const uriMongo = 'mongodb+srv://omarurregodev:oturrego0712@normalizrcluster.u64wunr.mongodb.net/?retryWrites=true&w=majority&ssl=true';
+const connectDB = () => {
+  mongoose.connect(uriMongo);
+  console.log("connected DB");
+}
+connectDB();
+
+
 app.use(cookieParser());
 app.use(session({
   //MongoStorage
   store: MongoStore.create({
-    mongoUrl:'mongodb+srv://omarurregodev:oturrego0712@normalizrcluster.u64wunr.mongodb.net/?retryWrites=true&',
+    mongoUrl:'mongodb+srv://omarurregodev:oturrego0712@normalizrcluster.u64wunr.mongodb.net/?retryWrites=true&w=majority&ssl=true',
     mongoOptions: advancedOptions
   }),
   key: 'currentSession',
@@ -83,15 +91,7 @@ passport.use(
   new localStrategy(
     { passReqToCallback: true},
     async (req, username, password, done) => {
-      console.log("register", username + password);
-      mongoose.connect(uriMongo);
       try {
-        console.log(req.body.name ,
-          req.body.lastName,
-          username,
-          req.body.direccion,
-          createHash(password));
-
         UsuariosSchema.create(
           {
             name:req.body.name ,
@@ -112,55 +112,47 @@ passport.use(
       }
     }
   )
-)
-// passport.use('register', new localStrategy({passReqToCallback: true}, async (req, username, password, done) => {
-//   console.log(req.body, username, password);
-//   const userArr = await usuario.listUsers();
-//   const exist = userArr.find((usuario) => {
-//       return usuario.username == username;
-//   });
-//   if (exist) {
-//     return done(null, false)
-//   } else {
-//     const newUser = await usuario.newUser(req.body);
-//     return done(null, newUser);
-//   }
-// }));
+);
 
-passport.use('login', new localStrategy((username, password, done) => {
-  const exist = usuarios.find((usuario) => {
-      return usuario.nombre == username && usuario.password == password;
-  });
-  if (!exist) {
-      return done(null, false);
-  } else {
-      return done(null, exist);
+passport.use("login", 
+new localStrategy((username, password, done) => {
+  try {
+    console.log(username);
+    UsuariosSchema.findOne({username}, (err, user) => {
+      if (err) {
+        return done(err, null);
+      }
+      if (!user) {
+        return done(null, false);
+      }
+      if (!isValidPassword(user, password)) {
+        return done(null, false);
+      }
+      return done(null, user);
+    })
+  } catch (e) {
+    return done(e, null);
   }
+  
 }));
 
 // funciones para serializar y deserializar
 
 passport.serializeUser((usuario, done) => {
   console.log(usuario);
-  done(null, usuario._id);
+  done(null, usuario.username);
 });
 
-passport.deserializeUser((id, done) => {
-  UsuariosSchema.findById(id, done);
+passport.deserializeUser((usuario, done) => {
+  UsuariosSchema.findOne({usuario}, done);
 })
-
-// passport.deserializeUser(async (id, done) => {
-//   await usuario.listUsersByID(id)
-//   .then((dbUser) => {
-//     done(null, dbUser);
-//   })
-//   .catch((err) => {
-//     done(err);
-//   });
-// });
 
 function createHash(password) {
   return bCrypt.hashSync(password, bCrypt.genSaltSync(10), null);
+}
+
+function isValidPassword(user, password) {
+  return bCrypt.compareSync(password, user.password);
 }
 
 const PORT = process.env.PORT || 8000;
