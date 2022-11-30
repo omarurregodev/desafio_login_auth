@@ -15,29 +15,13 @@ const usuario = new Usuario();
 //Creación de la sesión
 router.post("/login", passport.authenticate('login', {
   successRedirect: '/api/user',
-  failureRedirect: '/api/'
+  failureRedirect: '/api/login-error'
 }));
 
-  // const userArr = await usuario.listUsers();
-  // const userValido = await userArr.find((user) => user.username === req.body.username && user.password === req.body.password);
-  
-  // try {
-  //   if (userValido) {
-  //     req.session.contador = 1;
-  //     req.session.name = req.body.username;
-  //     req.session.status = "success";
-  //     console.log(req.session.name);
-  //     req.session.save(() => {
-  //       console.log(req.session);
-  //       res.status(200).send(req.session)
-  //     });
-  //   } else {
-  //     req.session.contador++;
-  //     res.send(req.session);
-  //   }
-  // } catch (e) {
-  //   res.status(500).json({ status: 'error', message: 'Algo salio mal al hacer login' });
-  // }
+router.get("/login-error", (req, res) => {
+  res.status(400).json({status:"No se pudo iniciar sesion!"})
+})
+
 
 // Destruyo la sesion
 
@@ -63,13 +47,14 @@ router.get("/user", (req, res) => {
 // Registro de usuario
 
 router.post("/register", passport.authenticate('register', {
-  successRedirect: '/api/',
+  successRedirect: '/api/login',
   failureRedirect: '/api/register'
 }));
 
-router.get('/', (req, res) => {
-  res.json({"message": "Usuario creado con exito!"})
+router.get('/login', (req, res) => {
+  res.status(200).json({"message": "Usuario creado con exito!"})
 })
+
 
 
 export default router;

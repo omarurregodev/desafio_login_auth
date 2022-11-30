@@ -1,25 +1,10 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import Navbar from "./Components/Navbar.jsx";
 
 export const Home = () => {
-  const navigate = useNavigate();
-  const handleLogOut = async () => {
-    try {
-      const {data:response} = await axios.get(
-        "http://localhost:8000/api/logout",
-        {
-          withCredentials: true
-        }
-      );
-      console.log(response);
-      navigate("/logout");
-    } catch (e) {
-      
-    }
-  };
 
-  const [data, setData] = useState();
+  const [username, setUsername] = useState();
   const [loading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -33,7 +18,7 @@ export const Home = () => {
           }
         );
         console.log("respuesta", response.name.user);
-        setData(response.name.user);
+        setUsername(response.name.user);
       } catch (e) {
         console.log(e);
       }
@@ -47,11 +32,10 @@ export const Home = () => {
         <>Loading...</>
         ) : (
           <>
-          {" "}
-          Bienvenido {data}!
+          <Navbar data={{name: username}}></Navbar>
+          
         </>
       )}
-      <button onClick={handleLogOut}>Log Out</button>
     </div>
   );
 };

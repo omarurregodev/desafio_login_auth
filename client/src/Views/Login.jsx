@@ -26,13 +26,13 @@ const Login = () => {
           withCredentials: true
         }
       );
-      console.log(response);
+      console.log(response.status);
       if (response.status === 200) {
         navigate('/home');
         window.location.reload();
       }
     } catch (e) {
-      console.log("esta haciendo error el frontend");
+      alert("inicio de sesion erroneo")
       console.error(e);
     }
   };

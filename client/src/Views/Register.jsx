@@ -32,9 +32,8 @@ export default function Register() {
                     withCredentials: true
                 }
             );
-            console.log(response.data);
-            console.log(JSON.stringify(response));
-            if (response) {
+            console.log(response.status);
+            if (response.status === 200) {
                 navigate('/');
                 window.location.reload();
             }
