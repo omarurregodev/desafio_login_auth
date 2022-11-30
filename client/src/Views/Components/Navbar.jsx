@@ -24,11 +24,11 @@ export default function Navbar({ data }) {
         } catch (e) {}
     };
     return (
-        <MDBNavbar light bgColor="light">
-        <MDBContainer fluid>
-            <MDBNavbarBrand>Bienvenido, {data.name}!</MDBNavbarBrand>
-            <MDBBtn outline onClick={handleLogOut}>Cerrar Sesión</MDBBtn>
-        </MDBContainer>
+        <MDBNavbar className="p-3 bg-success bg-gradient text-white">
+            <MDBContainer fluid>
+                <MDBNavbarBrand className="text-white">Bienvenido, {data.name}!</MDBNavbarBrand>
+                <MDBBtn color='warning' className="mx-1" onClick={handleLogOut}>Cerrar Sesión</MDBBtn>
+            </MDBContainer>
         </MDBNavbar>
     );
 }

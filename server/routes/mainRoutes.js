@@ -1,5 +1,4 @@
 import express from "express";
-import mongoose from "mongoose";
 import Usuario from "../DAOs/usuarios.dao.class.js";
 import passport from "passport";
 

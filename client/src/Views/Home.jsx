@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Navbar from "./Components/Navbar.jsx";
-
+import SpinnerLoading from "./Components/Spinner_loading.jsx";
+import { MDBContainer } from 'mdb-react-ui-kit';
 export const Home = () => {
 
   const [username, setUsername] = useState();
@@ -29,11 +30,16 @@ export const Home = () => {
   return (
     <div>
       {loading ? (
-        <>Loading...</>
+        <>
+          <MDBContainer className="p-0 d-flex align-items-center justify-content-center" style={{height:"100vh"}} fluid>
+            <SpinnerLoading></SpinnerLoading>
+          </MDBContainer>
+        </>
         ) : (
-          <>
-          <Navbar data={{name: username}}></Navbar>
-          
+        <>
+          <MDBContainer className="p-0" fluid>
+            <Navbar data={{name: username}}></Navbar>
+          </MDBContainer>
         </>
       )}
     </div>
