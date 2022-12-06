@@ -6,6 +6,7 @@ import cookieParser from "cookie-parser";
 import session from "express-session";
 import MongoStore from 'connect-mongo'; 
 import bCrypt from 'bcrypt';
+import dotenv from 'dotenv';
 import Usuario from "./DAOs/usuarios.dao.class.js";
 import UsuariosSchema from './models/usuarios.model.js';
 
@@ -15,6 +16,9 @@ import mainRoutes from "./routes/mainRoutes.js";
 //passport imports
 import passport from "passport";
 import { Strategy } from "passport-local";
+
+// CONFIGURO MIS VARIABLES DE ENTORNO
+dotenv.config();
 
 const localStrategy = Strategy;
 
@@ -28,10 +32,10 @@ app.use(express.urlencoded({ extended: true }));
 
 
 // INICIO LA BASE DE DATOS!!
-const uriMongo = 'mongodb+srv://omarurregodev:oturrego0712@normalizrcluster.u64wunr.mongodb.net/?retryWrites=true&w=majority&ssl=true';
+const uriMongo = process.env.MongoDBURL_ATLAS;
 const connectDB = () => {
   mongoose.connect(uriMongo);
-  console.log("connected DB");
+  console.log("connected DB", process.env.MongoDBURL_ATLAS);
 }
 connectDB();
 
@@ -40,7 +44,7 @@ app.use(cookieParser());
 app.use(session({
   //MongoStorage
   store: MongoStore.create({
-    mongoUrl:'mongodb+srv://omarurregodev:oturrego0712@normalizrcluster.u64wunr.mongodb.net/?retryWrites=true&w=majority&ssl=true',
+    mongoUrl:process.env.MongoDBURL_ATLAS,
     mongoOptions: advancedOptions
   }),
   key: 'currentSession',
@@ -155,7 +159,7 @@ function isValidPassword(user, password) {
   return bCrypt.compareSync(password, user.password);
 }
 
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT_server || 8000;
 
 const server = app.listen(PORT, () => {
   console.log(`Servidor http escuchando en el puerto ${server.address().port}`);
