@@ -48,7 +48,7 @@ app.use(session({
     mongoOptions: advancedOptions
   }),
   key: 'currentSession',
-  secret: 'its my secret',
+  secret: process.env.SECRET_KEY_MONGO,
   cookie: { 
     maxAge: 1000 * 60 * 10,
    }, // value of maxAge is defined in milliseconds. 
