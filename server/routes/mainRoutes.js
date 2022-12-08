@@ -4,6 +4,7 @@ import passport from "passport";
 import { fork } from "child_process";
 import parseArgs from "minimist";
 
+
 const argv = parseArgs(process.argv.slice(2));
 
 
@@ -75,8 +76,8 @@ router.get("/info", (req, res) => {
   });
 });
 
-router.get("/api/randoms", (req, res) => {
-  const child = fork("../Utils/childCalc.js"); // < --- creamos proceso hijo
+router.get("/randoms", (req, res) => {
+  const child = fork("./Utils/childCalc.js"); // < --- creamos proceso hijo
   const { cant } = req.query; // <--- obtenemos query de URL
   let numberToCalculate = parseInt(cant) || 100000; // <--- verificamos si se hace default o tiene un valor
   child.send(numberToCalculate); // <--- manda a child el numero a calcular
