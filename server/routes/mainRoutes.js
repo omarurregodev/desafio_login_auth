@@ -1,6 +1,11 @@
 import express from "express";
 import Usuario from "../DAOs/usuarios.dao.class.js";
 import passport from "passport";
+import { fork } from "child_process";
+import parseArgs from "minimist";
+
+const argv = parseArgs(process.argv.slice(2));
+
 
 
 //inicializo la ruta
@@ -53,6 +58,38 @@ router.post("/register", passport.authenticate('register', {
 router.get('/login', (req, res) => {
   res.status(200).json({"message": "Usuario creado con exito!"})
 })
+
+
+router.get("/info", (req, res) => {
+  res.status(200).json({
+    status: "success",
+    data: {
+      arguments: argv,
+      process: process.pid,
+      version: process.version,
+      system: process.platform,
+      location: process.cwd(),
+      memory: process.memoryUsage(),
+      title: process.title
+    }
+  });
+});
+
+router.get("/api/randoms", (req, res) => {
+  const child = fork("../Utils/childCalc.js"); // < --- creamos proceso hijo
+  const { cant } = req.query; // <--- obtenemos query de URL
+  let numberToCalculate = parseInt(cant) || 100000; // <--- verificamos si se hace default o tiene un valor
+  child.send(numberToCalculate); // <--- manda a child el numero a calcular
+  child.on("message", (message) => {
+    res.status(200).json(message); // <---- manda el resultado a front
+  });
+  child.on("error", (error) => {
+    res.status(500).json({ message: "Algo salio mal", error }); // <--- imprime error
+  });
+  child.on("exit", (code) => {
+    console.log("child exited with a code of ", code); // <--- termina proceso
+  });
+});
 
 
 

@@ -20,6 +20,7 @@ import { Strategy } from "passport-local";
 // CONFIGURO MIS VARIABLES DE ENTORNO
 dotenv.config();
 
+
 const localStrategy = Strategy;
 
 const usuario = new Usuario();
@@ -32,9 +33,8 @@ app.use(express.urlencoded({ extended: true }));
 
 
 // INICIO LA BASE DE DATOS!!
-const uriMongo = process.env.MongoDBURL_ATLAS;
 const connectDB = () => {
-  mongoose.connect(uriMongo);
+  mongoose.connect(process.env.MongoDBURL_ATLAS);
   console.log("connected DB", process.env.MongoDBURL_ATLAS);
 }
 connectDB();
@@ -158,6 +158,9 @@ function createHash(password) {
 function isValidPassword(user, password) {
   return bCrypt.compareSync(password, user.password);
 }
+
+// process object
+
 
 const PORT = process.env.PORT_server || 8000;
 
