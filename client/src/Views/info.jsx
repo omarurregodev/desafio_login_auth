@@ -46,6 +46,7 @@ function Info() {
               <li> Path de Ejecucion: {data.data.title}</li>
               <li> Id de proceso: {data.data.process} </li>
               <li> Carpeta del proyecto: {data.data.location} </li>
+              <li> Número de CPU's: {data.data.numCPUs} </li>
             </ul>
           </div>
         )}

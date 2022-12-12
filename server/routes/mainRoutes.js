@@ -3,6 +3,7 @@ import Usuario from "../DAOs/usuarios.dao.class.js";
 import passport from "passport";
 import { fork } from "child_process";
 import parseArgs from "minimist";
+import numCpus from "os";
 
 
 const argv = parseArgs(process.argv.slice(2));
@@ -71,7 +72,8 @@ router.get("/info", (req, res) => {
       system: process.platform,
       location: process.cwd(),
       memory: process.memoryUsage(),
-      title: process.title
+      title: process.title,
+      numCPUs: numCpus.cpus().length
     }
   });
 });
